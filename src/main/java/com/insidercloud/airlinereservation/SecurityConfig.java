@@ -11,29 +11,42 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final LogoutHandler logoutHandler;
+  private final LogoutHandler logoutHandler;
 
-    public SecurityConfig(LogoutHandler logoutHandler) {
-        this.logoutHandler = logoutHandler;
-    }
+  public SecurityConfig(LogoutHandler logoutHandler) {
+    this.logoutHandler = logoutHandler;
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests( requests -> requests
-                .requestMatchers("/","/*.png","/*.ico","/*.xml","/*.json","/packages/**","/images/**","/css/**","/js/**").permitAll()
-                .anyRequest().authenticated()
-                )
-                    .oauth2Login()
-                    .and()
-                    .logout(logout -> logout
-                            .deleteCookies("JSESSIONID")
-                            .invalidateHttpSession(true)
-                            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                            .addLogoutHandler(logoutHandler)
-                            .logoutSuccessUrl("/")
-                    );
+    http.authorizeHttpRequests(
+            requests ->
+                requests
+                    .requestMatchers(
+                        "/",
+                        "/*.png",
+                        "/*.ico",
+                        "/*.xml",
+                        "/*.json",
+                        "/packages/**",
+                        "/images/**",
+                        "/css/**",
+                        "/js/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .oauth2Login()
+        .and()
+        .logout(
+            logout ->
+                logout
+                    .deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .addLogoutHandler(logoutHandler)
+                    .logoutSuccessUrl("/"));
 
-        return http.build();
-    }
+    return http.build();
+  }
 }
