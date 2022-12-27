@@ -7,17 +7,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Controller for requests to the {@code /profile} resource. Populates the model with the claims from the
- * {@linkplain OidcUser} for use by the view.
+ * Controller for requests to the {@code /profile} resource. Populates the model with the claims
+ * from the {@linkplain OidcUser} for use by the view.
  */
 @Controller
 public class ProfileController {
 
-    @GetMapping("/dashboard")
-    public String profile(Model model, @AuthenticationPrincipal OidcUser oidcUser) {
-        model.addAttribute("title", "Dashboard");
-        model.addAttribute("profile", oidcUser.getClaims());
-        return "profile";
-    }
-
+  @GetMapping("/dashboard")
+  public String profile(Model model, @AuthenticationPrincipal OidcUser oidcUser) {
+    model.addAttribute("title", "Dashboard");
+    model.addAttribute("profile", oidcUser.getClaims());
+    return "profile";
+  }
 }
